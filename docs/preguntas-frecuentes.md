@@ -57,6 +57,18 @@ Para instrucciones detalladas por plataforma, consulte [docs/instalacion.md](ins
  
 ## ¿Cómo se ejecuta Pulso?
 
+Una vez compilado, el binario se encuentra en `build/bin/`. Para ejecutarlo:
+ 
+**Linux y macOS:**
+```bash
+./build/bin/pulso
+```
+ 
+**Windows:**
+```bash
+build\bin\Release\pulso.exe
+```
+
 ---
  
 ## ¿Cómo puedo contribuir al proyecto?
