@@ -39,6 +39,20 @@ Las frecuencias de muestreo pueden ajustarse según el entorno de ejecución.
  
 ## ¿Cómo se instala Pulso?
 
+Para instalar Pulso se necesita un compilador C++ (GCC, Clang o MSVC), CMake 3.16 o superior y Git. Los pasos básicos son:
+ 
+```bash
+# Clonar el repositorio
+git clone https://github.com/sis-inf/pulso.git
+cd pulso
+ 
+# Compilar
+cmake -B build
+cmake --build build
+```  
+
+Para instrucciones detalladas por plataforma, consulte [docs/instalacion.md](instalacion.md).
+
 ---
  
 ## ¿Cómo se ejecuta Pulso?
