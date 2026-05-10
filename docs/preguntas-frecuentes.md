@@ -73,6 +73,17 @@ build\bin\Release\pulso.exe
  
 ## ¿Cómo puedo contribuir al proyecto?
 
+El proyecto usa el **Forking Workflow**. Los pasos básicos son:
+ 
+1. Haz un fork del repositorio en tu cuenta de GitHub.
+2. Clona tu fork y agrega el repositorio original como `upstream`.
+3. Sincroniza con `upstream/dev` antes de empezar a trabajar.
+4. Crea una rama siguiendo la convención `tipo/descripcion-corta`.
+5. Realiza tus cambios con commits descriptivos siguiendo la convención del proyecto.
+6. Abre un Pull Request hacia `dev` referenciando el issue con `Closes #N`.
+
+Para más detalles, consulte [CONTRIBUTING.md](../CONTRIBUTING.md).
+
 ---
  
 ## ¿Qué compilador necesito para usar Pulso?
