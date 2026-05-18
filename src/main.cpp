@@ -12,6 +12,9 @@ double ObtenerUsoCPU();
 // utils/disk_usage.cpp
 double getDiskUsage();
 
+// utils/ram_usage.cpp
+double getRAMUsage();
+
 // collectors/network/network_io.cpp
 struct NetworkIO { long rx; long tx; };
 NetworkIO getNetworkIO();
@@ -40,6 +43,7 @@ void start(int intervalo_ms) {
         // 1. Actualizar el mapa con las lecturas de cada collector
         std::map<std::string, double> metricas;
         metricas["cpu"]    = ObtenerUsoCPU();
+        metricas["ram"]    = getRAMUsage();
         metricas["disk"]   = getDiskUsage();
 
         NetworkIO net      = getNetworkIO();
