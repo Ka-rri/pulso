@@ -7,6 +7,7 @@
 #include <sstream>
 #include <vector>
 #include <cctype>
+#include <string>
 
 // Estructura interna para leer /proc/stat
 struct CPUStat {
