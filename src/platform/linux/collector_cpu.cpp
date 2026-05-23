@@ -75,7 +75,7 @@ int contarCores() {
     int cores = 0;
 
     while (std::getline(file, line)) {
-        if (line.rfind("cpu", 0) == 0 && isdigit(line[3])) {
+        if (line.rfind("cpu", 0) == 0 && std::isdigit(static_cast<unsigned char>(line[3]))) {
             cores++;
         }
     }
@@ -89,7 +89,7 @@ std::string CollectorCPU::nombre() const {
 }
 
 // Función principal
-std::vector<Metrica> CollectorCPU::recolectar() {
+std::vector<pulso::core::Metrica> CollectorCPU::recolectar() {
     CPUStat a = leerCPU();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(120));
@@ -103,7 +103,7 @@ std::vector<Metrica> CollectorCPU::recolectar() {
     if (usage > 100) usage = 100;
 
     return {
-        {"cpu.usage", usage, "porcentaje"},
-        {"cpu.cores", cores, "cantidad"}
+        pulso::core::Metrica{"cpu.usage", usage, "porcentaje"},
+        pulso::core::Metrica{"cpu.cores", cores, "cantidad"}
     };
 }
