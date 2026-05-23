@@ -26,3 +26,19 @@ target_link_libraries(test_config PRIVATE
     GTest::gtest_main
 )
 gtest_discover_tests(test_config)
+
+add_executable(test_storage
+    storage/test_storage.cpp
+)
+target_include_directories(test_storage PRIVATE
+    ${PROJECT_SOURCE_DIR}/src
+)
+target_link_libraries(test_storage PRIVATE
+    GTest::gtest
+    GTest::gtest_main
+    SQLiteCpp
+    sqlite3
+    pthread
+    dl
+)
+gtest_discover_tests(test_storage)
