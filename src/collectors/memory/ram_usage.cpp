@@ -38,6 +38,8 @@ RamUsage getRamUsage() {
 
     if (memTotal == 0 || memAvailable == 0) {
         throw runtime_error("No se encontraron las claves MemTotal o MemAvailable en /proc/meminfo");
+    }
+
     memTotal *= 1024;
     memAvailable *= 1024;
 
