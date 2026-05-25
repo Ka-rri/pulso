@@ -10,7 +10,7 @@ Storage::Storage(const std::string& dbPath)
     db_.exec("PRAGMA journal_mode=WAL;");
  
     // Inicializar esquema (idempotente)
-    inicializarEsquema(db_);
+    pulso::storage::inicializarEsquema(db_);
 }
  
 void Storage::save(const pulso::core::Snapshot& snapshot) {
