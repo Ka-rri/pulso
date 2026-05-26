@@ -13,7 +13,7 @@ RamUsage getRamUsage() {
     ifstream file("/proc/meminfo");
 
     if (!file.is_open()) {
-        throw runtime_error("No se pudo abrir /proc/meminfo");
+        throw runtime_error("No se pudo abrir el archivo /proc/meminfo: verifique permisos y disponibilidad del sistema");
     }
 
     string line;
@@ -37,7 +37,7 @@ RamUsage getRamUsage() {
     }
 
     if (memTotal == 0 || memAvailable == 0) {
-        throw runtime_error("No se pudieron leer los datos de memoria");
+        throw runtime_error("No se encontraron las claves MemTotal o MemAvailable en /proc/meminfo");
     }
 
     memTotal *= 1024;
