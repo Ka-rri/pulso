@@ -9,6 +9,8 @@
 #include <cctype>
 #include <string>
 
+namespace pulso::collectors {
+
 // Estructura interna para leer /proc/stat
 struct CPUStat {
     unsigned long user = 0;
@@ -21,7 +23,7 @@ struct CPUStat {
     unsigned long steal = 0;
 };
 
-// Leer primera línea de /proc/stat
+// Leer primera linea de /proc/stat
 CPUStat leerCPU() {
     std::ifstream file("/proc/stat");
 
@@ -51,12 +53,11 @@ double calcularUso(const CPUStat& a, const CPUStat& b) {
 
     unsigned long totalA = a.user + a.nice + a.system + a.idle +
                            a.iowait + a.irq + a.softirq + a.steal;
-
     unsigned long totalB = b.user + b.nice + b.system + b.idle +
                            b.iowait + b.irq + b.softirq + b.steal;
 
     unsigned long totalDelta = totalB - totalA;
-    unsigned long idleDelta = idleB - idleA;
+    unsigned long idleDelta  = idleB  - idleA;
 
     if (totalDelta == 0) return 0;
 
@@ -97,9 +98,9 @@ std::vector<pulso::core::Metrica> CollectorCPU::recolectar() {
     CPUStat b = leerCPU();
 
     double usage = calcularUso(a, b);
-    int cores = contarCores();
+    int cores    = contarCores();
 
-    if (usage < 0) usage = 0;
+    if (usage < 0)   usage = 0;
     if (usage > 100) usage = 100;
 
     return {
@@ -107,3 +108,5 @@ std::vector<pulso::core::Metrica> CollectorCPU::recolectar() {
         pulso::core::Metrica{"cpu.cores", cores, "cantidad"}
     };
 }
+
+} // namespace pulso::collectors
