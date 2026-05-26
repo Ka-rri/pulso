@@ -25,11 +25,12 @@ graph TD
     A --> G[Logger]
 
     B --> H[/proc/stat, /proc/meminfo]
-    C --> I[Métricas históricas]
+    C --> I[Métricas históricas]SSSSS
     D --> J[Detección de anomalías]
     E --> K[Cliente HTTP]
     F --> L[Notificaciones]
     G --> M[pulso.log]
+    ´´´
 ## 2. Visión General del Sistema
 Pulso es una plataforma de monitoreo distribuida. A diferencia de herramientas CLI aisladas, Pulso integra un modelo de recolección de datos mediante agentes que se comunican con una infraestructura central para la persistencia, alerta y visualización mediante una interfaz web moderna.
 
