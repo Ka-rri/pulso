@@ -14,13 +14,13 @@ namespace pulso::core {
  */
 struct Metrica {
     /** @brief Nombre identificador de la metrica. Ej: "cpu.usage", "ram.used" */
-    std::string name;
+    std::string nombre;
 
     /** @brief Valor numerico de la medicion */
-    double value;
+    double valor;
 
     /** @brief Unidad en que se expresa el valor. Ej: "porcentaje", "bytes" */
-    std::string unit;
+    std::string unidad;
 
     /** @brief Momento en que se tomo la medición, expresado como Unix timestamp en segundos. */
     std::int64_t timestamp;
@@ -37,6 +37,6 @@ struct Snapshot {
     std::int64_t timestamp;
 
     /** @brief Coleccion de métricas individuales capturadas en este snapshot. */
-    std::vector<Metrica> metrics;
+    std::vector<Metrica> metricas;
 };
 } // namespace pulso::core
