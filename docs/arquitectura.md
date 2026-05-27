@@ -10,6 +10,7 @@
 | **API** | Expone las métricas vía HTTP para consultas externas |
 | **Alert Manager** | Genera alertas cuando las métricas superan umbrales definidos |
 | **Logger** | Registra eventos, errores y actividad del sistema |
+
 ## 1. Introducción
 La arquitectura de software de **Pulso** define la organización estructural del sistema, sus responsabilidades y las interconexiones entre sus componentes. Este diseño responde a la necesidad de monitorear recursos críticos de hardware (CPU, RAM, Red) con un enfoque en la eficiencia, escalabilidad y disponibilidad de datos en tiempo real.
 
@@ -24,12 +25,14 @@ graph TD
     A --> F[Alert Manager]
     A --> G[Logger]
 
-    B --> H[/proc/stat, /proc/meminfo]
-    C --> I[Métricas históricas]
-    D --> J[Detección de anomalías]
+    B --> H["/proc/stat, /proc/meminfo"]
+    C --> I["Métricas históricas"]
+    D --> J["Detección de anomalías"]
     E --> K[Cliente HTTP]
     F --> L[Notificaciones]
     G --> M[pulso.log]
+```
+
 ## 2. Visión General del Sistema
 Pulso es una plataforma de monitoreo distribuida. A diferencia de herramientas CLI aisladas, Pulso integra un modelo de recolección de datos mediante agentes que se comunican con una infraestructura central para la persistencia, alerta y visualización mediante una interfaz web moderna.
 
@@ -66,26 +69,28 @@ El siguiente diagrama describe la interacción entre los componentes definidos p
 
 ```mermaid
 graph TD
-    subgraph "Nivel de Sistema (Host)"
-        A[Agente Recolector] -->|Sonda de Hardware| B(CPU / RAM / Red)
+    subgraph Nivel_Sistema_Host
+        A[Agente Recolector] -->|Sonda de Hardware| B[CPU / RAM / Red]
     end
 
-    subgraph "Servicios Centrales"
-        A -->|Envío de Datos JSON| C[Almacenamiento de Métricas]
-        C --> D[Módulo de Alertas]
-        D -->|Trigger| E{¿Umbral excedido?}
-        E -->|Sí| F[Notificación/Alerta]
+    subgraph Servicios_Centrales
+        A -->|Envio de Datos JSON| C[Almacenamiento de Metricas]
+        C --> D[Modulo de Alertas]
+        D -->|Trigger| E[Umbral excedido]
+        E -->|Si| F[Notificacion / Alerta]
     end
 
-    subgraph "Capa de Presentación"
+    subgraph Capa_Presentacion
         C -->|Fetch Data| G[Panel Web]
-        G -->|Visualización| H[Usuario Final]
+        G -->|Visualizacion| H[Usuario Final]
     end
 
     style A fill:#f96,stroke:#333,stroke-width:2px
     style G fill:#6cf,stroke:#333,stroke-width:2px
 ```
+
 ---
+
 ## 6. Decisiones Técnicas (ADR)
 ### 6.1 Elección de C++17 para el Agente
 * **Contexto:** Se requiere un monitoreo constante y preciso de los recursos de hardware sin impactar negativamente en el rendimiento del servidor o host donde se ejecuta la herramienta.
