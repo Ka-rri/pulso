@@ -3,6 +3,9 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <cstdlib>
+
+#define PULSO_VERSION "0.1.0"
 
 /**
  * @brief Procesa la lista de métricas y actualiza la configuración.
@@ -69,7 +72,14 @@ bool parse_arguments(int argc, char* argv[], MonitorConfig& config)
             print_help();
             return false;
         }
+        else if (arg == "--version")
+       {
+            std::cout << "pulso v"
+                      << PULSO_VERSION
+                      << " (C++17) - 2026\n";
 
+            std::exit(0);
+        }
         /**
          * Procesar intervalo.
          */
