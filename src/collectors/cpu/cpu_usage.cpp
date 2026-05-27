@@ -3,6 +3,7 @@
 #include <sstream>
 #include <thread>
 #include <chrono>
+#include <ctime>
 
 /// @brief Lee y parsea los contadores de CPU desde /proc/stat.
 /// @param ruta Ruta al archivo de estadísticas.
@@ -107,3 +108,24 @@ double ObtenerUsoCPU() {
 
   return uso;
 }
+
+// Implementación de CollectorCPU 
+ 
+namespace pulso::collectors {
+ 
+std::string CollectorCPU::nombre() const {
+  return "cpu";
+}
+ 
+std::vector<pulso::core::Metrica> CollectorCPU::recolectar() {
+  pulso::core::Metrica metrica;
+  metrica.name      = "cpu.usage";
+  metrica.value     = ObtenerUsoCPU();
+  metrica.unit      = "porcentaje";
+  metrica.timestamp = static_cast<std::int64_t>(std::time(nullptr));
+ 
+  return { metrica };
+}
+ 
+}  // namespace pulso::collectors
+ 

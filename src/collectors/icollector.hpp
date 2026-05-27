@@ -1,26 +1,33 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "../core/types.hpp"
+#include "core/types.hpp"
 
 namespace pulso::collectors {
 
 /**
- * @brief Interfaz base para todos los colectores de métricas del sistema.
+ * @brief Interfaz abstracta común para todos los recolectores de métricas.
  *
- * Todo collector debe implementar nombre() y recolectar() para integrarse
- * al pipeline de monitoreo de Pulso.
+ * Cada categoría de métrica (CPU, memoria, disco, red) se implementa como
+ * un collector distinto que hereda de esta interfaz. Esto permite al sampler
+ * iterar sobre todos los collectors sin conocer sus detalles internos.
  */
 class ICollector {
-public:
-    virtual ~ICollector() = default;
+ public:
+  virtual ~ICollector() = default;
 
-    /// @brief Retorna el nombre identificador del collector. Ej: "disk", "cpu".
-    virtual std::string nombre() const = 0;
+  /**
+   * @brief Devuelve el nombre identificador del collector.
+   * @return Nombre del collector como cadena de texto.
+   */
+  virtual std::string nombre() const = 0;
 
-    /// @brief Recolecta las métricas del sistema y las retorna como vector.
-    /// @return Vector de Metrica con los valores medidos.
-    virtual std::vector<pulso::core::Metrica> recolectar() = 0;
+  /**
+   * @brief Ejecuta una medición y devuelve las métricas obtenidas.
+   * @return Vector de pulso::core::Metrica con las métricas recolectadas.
+   * @throws pulso::core::ErrorRecoleccion si la medición falla.
+   */
+  virtual std::vector<pulso::core::Metrica> recolectar() = 0;
 };
 
-} // namespace pulso::collectors
+}  // namespace pulso::collectors
