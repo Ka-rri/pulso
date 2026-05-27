@@ -1,49 +1,41 @@
+#include "ram_usage.hpp"
+
 #include <fstream>
-#include <sstream>
 #include <string>
 #include <stdexcept>
-using namespace std;
-struct RamUsage {
-    long long total;
-    long long used;
-    long long available;
-};
 
-RamUsage getRamUsage() {
-    ifstream file("/proc/meminfo");
+double getRAMUsage() {
+    std::ifstream file("/proc/meminfo");
 
     if (!file.is_open()) {
-        throw runtime_error("No se pudo abrir el archivo /proc/meminfo: verifique permisos y disponibilidad del sistema");
+        throw std::runtime_error("No se pudo abrir /proc/meminfo");
     }
 
-    string line;
-    long long memTotal = 0;
-    long long memAvailable = 0;
+    std::string line;
 
-    while (getline(file, line)) {
-        istringstream iss(line);
-        string key;
-        long long value;
+    unsigned long long memTotal = 0;
+    unsigned long long memAvailable = 0;
 
-        iss >> key >> value;
+    while (std::getline(file, line)) {
 
-        if (key == "MemTotal:") {
-            memTotal = value;
+        if (line.find("MemTotal:") == 0) {
+
+            std::string value = line.substr(10);
+
+            memTotal = std::stoull(value);
         }
 
-        if (key == "MemAvailable:") {
-            memAvailable = value;
+        if (line.find("MemAvailable:") == 0) {
+
+            std::string value = line.substr(14);
+
+            memAvailable = std::stoull(value);
         }
     }
 
     if (memTotal == 0 || memAvailable == 0) {
-        throw runtime_error("No se encontraron las claves MemTotal o MemAvailable en /proc/meminfo");
+        throw std::runtime_error("No se pudieron leer datos de memoria");
     }
 
-    memTotal *= 1024;
-    memAvailable *= 1024;
-
-    long long memUsed = memTotal - memAvailable;
-
-    return {memTotal, memUsed, memAvailable};
+    return ((memTotal - memAvailable) * 100.0) / memTotal;
 }
