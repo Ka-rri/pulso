@@ -19,7 +19,6 @@ target_sources(pulso PRIVATE
     utils/console_formatter.cpp
     utils/disk_usage.cpp
     utils/logging/logger.cpp
-    utils/ram_usage.cpp
     utils/signal_handler.cpp
 )
 
