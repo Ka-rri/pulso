@@ -1,95 +1,47 @@
-#include <atomic>
-#include <chrono>
 #include <iostream>
-#include <map>
-#include <string>
-#include <thread>
+#include <exception>
 
-#include "cli/arg_parser.h"
-#include "config/config.hpp"
+#include <SQLiteCpp/Database.h>
 
-// --- Declaraciones de funciones existentes en otros archivos ---
+#include "storage/schema.hpp"
+#include "collectors/memory/ram_usage.h"
 
-// collectors/cpu/cpu_usage.cpp
-double ObtenerUsoCPU();
+int main() {
+    try {
+        // Abrir o crear base SQLite
+        SQLite::Database db(
+            "pulso.db",
+            SQLite::OPEN_READWRITE | SQLite::OPEN_CREATE
+        );
 
-// utils/disk_usage.cpp
-double getDiskUsage();
+        // Inicializar esquema
+        pulso::storage::inicializarEsquema(db);
 
-// utils/ram_usage.cpp
-double getRAMUsage();
+        // Obtener métricas RAM
+        auto ramInfo = pulso::collectors::memory::getRamUsage();
 
-// collectors/network/network_io.cpp
-struct NetworkIO {
-  long rx;
-  long tx;
-};
-NetworkIO getNetworkIO();
+        // Mostrar resultados
+        std::cout << "Pulso iniciado correctamente" << std::endl;
 
-// utils/console_formatter.cpp
-void printMetrics(const std::map<std::string, double> &data);
+        std::cout << "RAM total: "
+                  << ramInfo.total
+                  << " bytes" << std::endl;
 
-// utils/signal_handler.cpp
-void setupSignalHandler();
-extern std::atomic<bool> isRunning;
+        std::cout << "RAM usada: "
+                  << ramInfo.used
+                  << " bytes" << std::endl;
 
-// --------------------------------------------------------------
+        std::cout << "RAM disponible: "
+                  << ramInfo.available
+                  << " bytes" << std::endl;
 
-/**
- * @brief Ejecuta el loop de monitoreo hasta que isRunning sea false.
- *
- * En cada iteración:
- *  1. Recolecta métricas de CPU, disco y red en un mapa.
- *  2. Llama al formateador para mostrarlas por consola.
- *  3. Duerme `intervalo_ms` milisegundos antes del siguiente ciclo.
- *
- * @param intervalo_ms Tiempo de espera entre lecturas, en milisegundos.
- */
-void start(int intervalo_ms) {
-  while (isRunning) {
-    // 1. Actualizar el mapa con las lecturas de cada collector
-    std::map<std::string, double> metricas;
-    metricas["cpu"] = ObtenerUsoCPU();
-    metricas["ram"] = getRAMUsage();
-    metricas["disk"] = getDiskUsage();
+        return 0;
+    }
+    catch (const std::exception& e) {
+        std::cerr << "Error: "
+                  << e.what()
+                  << std::endl;
 
-    NetworkIO net = getNetworkIO();
-    metricas["net.rx"] = static_cast<double>(net.rx);
-    metricas["net.tx"] = static_cast<double>(net.tx);
-
-    // 2. Llamar al formateador
-    printMetrics(metricas);
-
-    // 3. Esperar X ms antes del siguiente ciclo
-    std::this_thread::sleep_for(std::chrono::milliseconds(intervalo_ms));
-  }
-}
-
-/**
- * @brief Punto de entrada principal.
- */
-int main(int argc, char *argv[]) {
-  /**
-   * Configuración con valores por defecto.
-   */
-  MonitorConfig config;
-
-  /**
-   * Procesar argumentos CLI.
-   */
-  if (!parse_arguments(argc, argv, config)) {
-    return 1;
-  }
-
-  /**
-   * Configurar manejo de señales.
-   */
-  setupSignalHandler();
-
-  /**
-   * Iniciar monitoreo.
-   */
-  start(config.interval_ms);
-
-  return 0;
+        return 1;
+    }
 }
