@@ -1,5 +1,5 @@
-#ifndef CPU_USAGE_H
-#define CPU_USAGE_H
+#ifndef PULSO_CPU_CPU_USAGE_HPP
+#define PULSO_CPU_CPU_USAGE_HPP
 
 #include <cstdint>
 #include <string>
@@ -70,4 +70,4 @@ class CollectorCPU : public ICollector {
 };
  
 }  // namespace pulso::collectors
-#endif // CPU_USAGE_H
+#endif // PULSO_CPU_CPU_USAGE_HPP
