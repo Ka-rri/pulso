@@ -1,10 +1,22 @@
 #pragma once
 
-#include <httplib.h>
+#include <chrono>
+#include <string>
 
 namespace pulso::http {
 
-/// Registra el handler de /health en el servidor httplib.
-void registrarHealth(httplib::Server& servidor);
+/**
+ * @brief Genera una respuesta JSON para el endpoint GET /health.
+ *
+ * Retorna un JSON con:
+ * - status: siempre "ok"
+ * - uptime_seconds: segundos transcurridos desde start_time
+ * - version: versión hardcodeada "0.1.0"
+ * - hostname: nombre real de la máquina
+ *
+ * @param start_time Punto en el tiempo cuando el agente inició.
+ * @return std::string JSON con la información de health-check.
+ */
+std::string handleHealth(std::chrono::steady_clock::time_point start_time);
 
 } // namespace pulso::http
