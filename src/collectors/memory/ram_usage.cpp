@@ -1,28 +1,28 @@
+#include "ram_usage.h"
 #include <fstream>
 #include <sstream>
 #include <string>
 #include <stdexcept>
-using namespace std;
-struct RamUsage {
-    long long total;
-    long long used;
-    long long available;
-};
 
-RamUsage getRamUsage() {
-    ifstream file("/proc/meminfo");
+namespace pulso::collectors::memory {
+
+RamInfo getRamUsage() {
+    std::ifstream file("/proc/meminfo");
 
     if (!file.is_open()) {
-        throw runtime_error("No se pudo abrir /proc/meminfo");
+        throw std::runtime_error(
+            "No se pudo abrir el archivo /proc/meminfo: "
+            "verifique permisos y disponibilidad del sistema"
+        );
     }
 
-    string line;
-    long long memTotal = 0;
+    std::string line;
+    long long memTotal     = 0;
     long long memAvailable = 0;
 
-    while (getline(file, line)) {
-        istringstream iss(line);
-        string key;
+    while (std::getline(file, line)) {
+        std::istringstream iss(line);
+        std::string key;
         long long value;
 
         iss >> key >> value;
@@ -37,13 +37,23 @@ RamUsage getRamUsage() {
     }
 
     if (memTotal == 0 || memAvailable == 0) {
-        throw runtime_error("No se pudieron leer los datos de memoria");
+        throw std::runtime_error(
+            "No se encontraron las claves MemTotal o MemAvailable en /proc/meminfo"
+        );
     }
 
-    memTotal *= 1024;
+    // Convertir de kB a bytes
+    memTotal     *= 1024;
     memAvailable *= 1024;
 
+    // Calcular memoria usada: MemTotal - MemAvailable
     long long memUsed = memTotal - memAvailable;
 
-    return {memTotal, memUsed, memAvailable};
+    return {
+        static_cast<uint64_t>(memTotal),
+        static_cast<uint64_t>(memUsed),
+        static_cast<uint64_t>(memAvailable)
+    };
 }
+
+} // namespace pulso::collectors::memory

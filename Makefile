@@ -4,7 +4,7 @@
 # ==============================================================================
 
 CXX     ?= g++
-CXXFLAGS = -std=c++17 -Wall
+CXXFLAGS = -std=c++17 -Wall -Wextra -Wpedantic -O2
 
 SRC_DIR  = src
 TEST_DIR = tests

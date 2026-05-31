@@ -1,8 +1,6 @@
 #pragma once
-
 #include <string>
 #include <vector>
-
 #include "core/types.hpp"
 
 namespace pulso::collectors {
@@ -16,27 +14,16 @@ namespace pulso::collectors {
  */
 class ICollector {
  public:
-  /**
-   * @brief Destructor virtual para permitir la destrucción polimórfica.
-   */
   virtual ~ICollector() = default;
 
   /**
    * @brief Devuelve el nombre identificador del collector.
-   *
-   * Identifica el subsistema que gestiona este collector.
-   * Ejemplos: "cpu", "memory", "disk", "network".
-   *
    * @return Nombre del collector como cadena de texto.
    */
   virtual std::string nombre() const = 0;
 
   /**
    * @brief Ejecuta una medición y devuelve las métricas obtenidas.
-   *
-   * Cada implementación concreta debe capturar las métricas propias
-   * de su subsistema y devolverlas como una colección de Metrica.
-   *
    * @return Vector de pulso::core::Metrica con las métricas recolectadas.
    * @throws pulso::core::ErrorRecoleccion si la medición falla.
    */

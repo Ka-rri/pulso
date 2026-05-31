@@ -19,7 +19,24 @@ public:
 // ---------------------------------------------------------------------------
 // Estructuras de configuración
 // ---------------------------------------------------------------------------
+/// Configuración del monitor del sistema.
+struct MonitorConfig
+{
+    /// Intervalo de actualización de métricas en milisegundos.
+    int interval_ms = 1000;
 
+    /// Habilita la lectura de métricas de CPU.
+    bool cpu = true;
+
+    /// Habilita la lectura de métricas de RAM.
+    bool ram = true;
+
+    /// Habilita la lectura de métricas de disco.
+    bool disk = true;
+
+    /// Constructor con valores por defecto.
+    MonitorConfig() = default;
+};
 struct ConfigServidor {
     std::string host  = "0.0.0.0";
     int         puerto = 8080;
